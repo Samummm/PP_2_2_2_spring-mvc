@@ -12,10 +12,12 @@ import web.service.CarServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class CarController {
-	private static CarService carService;
+
+	private CarService carService;
 	@Autowired
 	public CarController(CarService carService) {
 		this.carService = carService;
@@ -23,8 +25,11 @@ public class CarController {
 //	private static CarServiceImpl carService;
 
 	@GetMapping(value = "/cars")
-	public static String printCars(@RequestParam(value = "count", defaultValue = "5") Integer param, ModelMap model) {
-				model.addAttribute("carsList", carService.getCars().subList(0, param));
+	public String printCars(@RequestParam(value = "count", defaultValue = "5") Integer param, ModelMap model) {
+		List<Car> limitedCars = carService.getCars().stream()
+				.limit(param)
+				.collect(Collectors.toList());
+		model.addAttribute("carsList", limitedCars);
 		return "cars";
 	}
 }
