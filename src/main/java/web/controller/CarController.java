@@ -23,8 +23,8 @@ public class CarController {
 //	private static CarServiceImpl carService;
 
 	@GetMapping(value = "/cars")
-	public static String printCars(@RequestParam(value = "count", required = false) Optional <Integer> param, ModelMap model) {
-				model.addAttribute("carsList", carService.getCars().subList(0, param.orElseGet(() -> carService.getCars().size())));
+	public static String printCars(@RequestParam(value = "count", defaultValue = "5") Integer param, ModelMap model) {
+				model.addAttribute("carsList", carService.getCars().subList(0, param));
 		return "cars";
 	}
 }
